@@ -1,0 +1,16 @@
+*.log
+.idea
+.vscode
+.DS_Store
+.coverage
+cover
+*.pyc
+.python-version
+.pytest_cache/
+.cache/
+.mypy_cache/
+
+/venv/
+
+.env
+
