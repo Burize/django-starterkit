@@ -1,31 +1,24 @@
-from dataclasses import dataclass
 import dataclasses
-from uuid import UUID
+
+from template import api
 
 from django.contrib.auth import login
 from injector import inject
-from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from authentication.dtos import AccountDTO
 from authentication.seriaizers import LoginPayloadSerializer
 from authentication.services import AuthService
 
 
-@dataclass
-class AccountDTO:
-    id: UUID
-    email: str
-
-
-class AuthController(viewsets.ViewSet):
-    permission_classes = [AllowAny]
-
+@api.controller('')
+class AuthController:
     @inject
-    def __init__(self, auth_service: AuthService = AuthService()):
+    def __init__(self, auth_service: AuthService):
         self._auth_service = auth_service
 
+    @api.router_post('login/')
     def login(self, request: Request):
         serializer = LoginPayloadSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

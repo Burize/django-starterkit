@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import login
-from django.contrib.auth import logout
+from injector import inject
 from rest_framework.request import Request
 
 from authentication.models import Account
@@ -13,8 +13,9 @@ class AuthenticationException(BaseException):
 
 
 class AuthService:
-    def __init__(self):
-        self._account_repository = AccountRepository()
+    @inject
+    def __init__(self, account_repository: AccountRepository):
+        self._account_repository = account_repository
 
     def login(self, request: Request, username: str, password: str):
         account = self.authenticate(username, password)
@@ -26,9 +27,7 @@ class AuthService:
         except NotFoundException:
             raise AuthenticationException()
 
-
         password_is_valid = check_password(password, account.password)
-
 
         if not password_is_valid:
             raise AuthenticationException()

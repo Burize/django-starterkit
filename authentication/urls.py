@@ -1,9 +1,9 @@
-from django.urls import path
+from template.api import create_urls
 
 from authentication.controllers import AuthController
 from authentication.controllers import SignUpController
 
 urlpatterns = [
-    path('login/', AuthController.as_view({'post': 'login'})),
-    path('signup/', SignUpController.as_view({'post': 'signUp'})),
+    *create_urls(AuthController),
+    *create_urls(SignUpController),
 ]

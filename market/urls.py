@@ -1,9 +1,6 @@
-from django.urls import path
-
-from rest_framework.routers import DefaultRouter
 from market.controllers import OrderController
+from template.api import create_urls
 
-router = DefaultRouter()
-router.register(r'orders', OrderController, basename='orders')
-
-urlpatterns = router.urls
+urlpatterns = [
+    *create_urls(OrderController),
+]

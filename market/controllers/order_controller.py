@@ -6,7 +6,10 @@ from authentication.repositories import AccountRepository
 from market.queries import OrderQueries
 from rest_framework import status
 
+from template import api
 
+
+@api.controller('orders/')
 class OrderController(viewsets.ViewSet):
     def __init__(
         self,
@@ -18,6 +21,7 @@ class OrderController(viewsets.ViewSet):
         self._account_repository = account_repository
         self._order_queries = order_queries
 
+    @api.router_get('')
     def list(self, request: Request):
         user_id = request.user.id
         account = self._account_repository.get_by_user_id(user_id)

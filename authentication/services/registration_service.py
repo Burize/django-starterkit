@@ -1,20 +1,13 @@
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth import login
-from django.contrib.auth import logout
-from rest_framework.request import Request
-
 from authentication.models import Account
 from authentication.repositories import AccountRepository
-from template.exceptions import NotFoundException
-
 
 class CreateNewUserException(BaseException):
     pass
 
 
 class RegistrationService:
-    def __init__(self):
-        self._account_repository = AccountRepository()
+    def __init__(self, account_repository: AccountRepository):
+        self._account_repository = account_repository
 
     def create_new_user(self, username: str, email: str, password: str) -> Account:
         self._check_for_existence(username, email)

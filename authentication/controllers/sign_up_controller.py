@@ -1,6 +1,7 @@
 from django.db import transaction
+from template import api
+
 from injector import inject
-from rest_framework import viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,11 +10,13 @@ from authentication.seriaizers import SignUpPayloadSerializer
 from authentication.services import RegistrationService
 
 
-class SignUpController(viewsets.ViewSet):
+@api.controller('')
+class SignUpController:
     @inject
-    def __init__(self, registration_service: RegistrationService = RegistrationService()):
+    def __init__(self, registration_service: RegistrationService):
         self._registration_service = registration_service
 
+    @api.router_post('sign_up')
     @transaction.atomic()
     def signUp(self, request: Request):
         serializer = SignUpPayloadSerializer(data=request.data)
