@@ -14,9 +14,15 @@ class AccountRepository:
 
     def get_by_username(self, username: str) -> Account:
         account = Account.objects.filter(user__username=username).first()
-
         if not account:
             raise NotFoundException(f'Could not find account with username: {username}')
+
+        return account
+
+    def get_by_user_id(self, user_id: int) -> Account:
+        account = Account.objects.filter(user_id=user_id).first()
+        if not account:
+            raise NotFoundException(f'Could not find account with user_id: {user_id}')
 
         return account
 

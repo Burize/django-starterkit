@@ -10,7 +10,7 @@ class Account(TimestampedModel):
     id = models.UUIDField(primary_key=True, default=uuid4)
     email = models.CharField(max_length=128)
     is_verified = models.BooleanField(default=False)
-    user = models.OneToOneField(User, related_name='account', null=True, blank=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='account', on_delete=models.CASCADE)
 
     @property
     def password(self):
