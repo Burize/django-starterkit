@@ -5,11 +5,14 @@ from rest_framework.request import Request
 
 from authentication.models import Account
 from authentication.repositories import AccountRepository
+from template.exceptions import CustomException
 from template.exceptions import NotFoundException
 
 
-class AuthenticationException(BaseException):
-    pass
+class AuthenticationException(CustomException):
+    @property
+    def message(self):
+        return self.args[0] if self.args else 'Username or password is incorrect'
 
 
 class AuthService:

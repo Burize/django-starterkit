@@ -1,5 +1,7 @@
 import dataclasses
+from http import HTTPStatus
 
+from authentication.services.auth_service import AuthenticationException
 from template import api
 
 from django.contrib.auth import login
@@ -13,12 +15,13 @@ from authentication.services import AuthService
 
 
 @api.controller('')
+@api.without_authentication
 class AuthController:
     @inject
     def __init__(self, auth_service: AuthService):
         self._auth_service = auth_service
 
-    @api.router_post('login/')
+    @api.router_post('login/', exceptions=[(AuthenticationException, HTTPStatus.UNAUTHORIZED)])
     def login(self, request: Request):
         serializer = LoginPayloadSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

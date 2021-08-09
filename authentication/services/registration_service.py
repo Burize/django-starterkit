@@ -1,7 +1,9 @@
 from authentication.models import Account
 from authentication.repositories import AccountRepository
+from template.exceptions import CustomException
 
-class CreateNewUserException(BaseException):
+
+class CreateNewUserException(CustomException):
     pass
 
 

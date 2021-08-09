@@ -8,8 +8,10 @@ from django.conf.urls import re_path
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from template.api.auth import is_need_authentication
 from template.api.routing import ControllerClass
 from template.api.routing import Route
 
@@ -36,7 +38,7 @@ def _group_routes_by_path(routes: List[Route]):
 def _create_django_view(controller_class, routes: List[Route]):
     class View(APIView):
         authentication_classes = (SessionAuthentication,)
-        permission_classes = (IsAuthenticated,)
+        permission_classes = (IsAuthenticated, ) if is_need_authentication(controller_class) else ()
 
     for route in routes:
         dispatch = _create_dispatch_function(controller_class, route)
@@ -50,10 +52,13 @@ def _create_dispatch_function(controller_class, route: Route):
 
     def dispatch(view, request: Request):
         controller = Injector().get(controller_class)
-        return _call_controller_method(controller, route.func, request)
+        return _call_controller_method(controller, route.controller_method, request, route)
 
     return dispatch
 
 
-def _call_controller_method(controller, controller_method, request):
-    return controller_method(controller, request)
+def _call_controller_method(controller, controller_method, request, route: Route):
+    try:
+        return controller_method(controller, request)
+    except route.expected_exceptions as exception:
+        return Response(exception.message, status=route.http_code_by_exception[type(exception)])
