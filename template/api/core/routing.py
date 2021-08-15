@@ -1,3 +1,4 @@
+import re
 from typing import Callable
 from typing import List
 from typing import Literal
@@ -6,8 +7,13 @@ from typing import Protocol
 from typing import Tuple
 from typing import Type
 
+from uritemplate import URITemplate
+from uritemplate.variable import URIVariable
+
 ExceptionMatchToCode = Tuple[Type[Exception], int]
 HTTPMethod = Literal['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+
+_remove_query_params_regexp = re.compile(r'{\?[^}]*}')
 
 
 class Route:
@@ -18,13 +24,33 @@ class Route:
         controller_method: Callable,
         exceptions: Optional[List[ExceptionMatchToCode]] = (),
     ):
-        self.url = url
+        self._url = url
         self.http_method = http_method
         self.controller_method = controller_method
 
         self._exceptions = exceptions
         self.http_code_by_exception = {exception[0]: exception[1] for exception in exceptions}
         self.expected_exceptions = tuple(self.http_code_by_exception)
+
+    @property
+    def url(self):
+        return self._url
+
+    @property
+    def path(self):
+        return _remove_query_params_regexp.sub('', self.url)
+
+    @property
+    def query_parameters(self) -> Optional[URIVariable]:
+        uri_variables = [
+            variable
+            for variable in URITemplate(self.url).variables
+            if variable.operator == '?'
+        ]
+
+        if uri_variables:
+            return uri_variables[0]
+        return None
 
 
 class RouterDescriptor:

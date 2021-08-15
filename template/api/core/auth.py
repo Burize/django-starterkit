@@ -8,7 +8,7 @@ def without_authentication(cls: Type):
     return cls
 
 
-def is_need_authentication(cls: APIControllerInterface):
+def is_need_authentication(cls: Type[APIControllerInterface]):
     if not hasattr(cls, '_without_authentication'):
         return True
 

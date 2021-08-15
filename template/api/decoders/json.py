@@ -3,14 +3,13 @@ from typing import Dict
 from typing import List
 from typing import Type
 from typing import TypeVar
-from typing import Union
 
 import dataclasses
 from typing import get_origin
 
-Item = TypeVar('Item')
+from template.utils.types import is_optional
 
-NoneType = type(None)
+Item = TypeVar('Item')
 
 
 class JSONDecodeException(Exception):
@@ -40,10 +39,11 @@ class JSONDecodeException(Exception):
         return cls(f'Cannot find decoder for type  "{type}"')
 
 
-def json_decode(value, type_: Type[Item]) -> Item:
-    decoder = _get_decoder(type_)
+def json_decode(value, type_: Type) -> Item:
+    type__: Type[Item] = type_
+    decoder = _get_decoder(type__)
 
-    return decoder(value, type_)
+    return decoder(value, type__)
 
 
 def _get_decoder(type_: Type[Item]):
@@ -133,11 +133,3 @@ _decoders = {
     int: decode_int,
     bool: decode_bool,
 }
-
-
-def is_union(type_: object) -> bool:
-    return get_origin(type_) == Union
-
-
-def is_optional(type_: object) -> bool:
-    return is_union(type_) and NoneType in getattr(type_, '__args__', [])

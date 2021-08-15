@@ -1,25 +1,18 @@
-import inspect
-from typing import Callable
-from typing import get_type_hints
+from typing import Type
 
 from rest_framework.request import Request
 
 from template.api.argument_resolvers import ArgumentResolver
+from template.api.core.routing import Route
 
 
 class HttpRequestArgumentResolver(ArgumentResolver):
-    argument_name = 'request'
+    @classmethod
+    def is_supported(cls, route: Route, argument_name: str, argument_type: Type) -> bool:
+        if argument_type == Request:
+            return True
+        return False
 
     @classmethod
-    def is_supported(cls, controller_method: Callable) -> bool:
-        type_hints = get_type_hints(controller_method)
-
-        if cls.argument_name not in type_hints.keys():
-            return False
-
-        argument = type_hints[cls.argument_name]
-        return inspect.isclass(argument) and issubclass(argument, Request)
-
-    @classmethod
-    def resolve_argument(cls, request: Request, controller_method: Callable):
+    def resolve_argument(cls, request: Request, route: Route, argument_name: str, argument_type: Type):
         return request
