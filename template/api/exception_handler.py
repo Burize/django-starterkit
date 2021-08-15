@@ -12,13 +12,6 @@ def exception_handler(exc, context):
     if isinstance(exc, NotFoundException):
         return Response(exc.message, status=HTTPStatus.NOT_FOUND)
 
-
-    # if isinstance(exc, ErrorException):
-    #     return Response(exc.message, status=HTTPStatus.BAD_REQUEST)
-
-    # if isinstance(exc, InvalidCredentialsException):
-    #     return Response(exc.message, status=HTTPStatus.UNAUTHORIZED)
-
     default_handler_result = rf_exception_handler(exc, context)
     if default_handler_result:
         return default_handler_result

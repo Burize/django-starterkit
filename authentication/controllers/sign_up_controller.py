@@ -1,34 +1,35 @@
-from django.db import transaction
-from template import api
+from dataclasses import dataclass
+from http import HTTPStatus
 
-from injector import inject
-from rest_framework.request import Request
+from django.db import transaction
 from rest_framework.response import Response
 from rest_framework import status
+from injector import inject
 
-from authentication.seriaizers import SignUpPayloadSerializer
+from authentication.services.registration_service import CreateNewUserException
+from template import api
 from authentication.services import RegistrationService
 
 
+@dataclass
+class SighUpDTO:
+    username: str
+    email: str
+    password: str
+
+
 @api.controller('')
+@api.without_authentication
 class SignUpController:
     @inject
     def __init__(self, registration_service: RegistrationService):
         self._registration_service = registration_service
 
-    @api.router_post('sign_up')
+    @api.router_post('sign_up', exceptions=[(CreateNewUserException, HTTPStatus.BAD_REQUEST)])
     @transaction.atomic()
-    def signUp(self, request: Request):
-        serializer = SignUpPayloadSerializer(data=request.data)
-        serializer.is_valid()
-
-        credentials = serializer.validated_data
+    def signUp(self, request_body: SighUpDTO):
         self._registration_service.create_new_user(
-            username=credentials['username'],
-            email=credentials['email'],
-            password=credentials['password'],
+            username=request_body.username,
+            email=request_body.email,
+            password=request_body.password,
         )
-
-        return Response(status=status.HTTP_200_OK)
-
-

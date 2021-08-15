@@ -27,5 +27,3 @@ class OrderController(viewsets.ViewSet):
         account = self._account_repository.get_by_user_id(user_id)
 
         orders = self._order_queries.get_for_account(account.id)
-
-        return Response(status=status.HTTP_200_OK)

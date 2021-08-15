@@ -1,3 +1,5 @@
+from injector import inject
+
 from authentication.models import Account
 from authentication.repositories import AccountRepository
 from template.exceptions import CustomException
@@ -8,6 +10,7 @@ class CreateNewUserException(CustomException):
 
 
 class RegistrationService:
+    @inject
     def __init__(self, account_repository: AccountRepository):
         self._account_repository = account_repository
 

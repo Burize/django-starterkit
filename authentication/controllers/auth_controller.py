@@ -1,4 +1,5 @@
 import dataclasses
+from  dataclasses import dataclass
 from http import HTTPStatus
 
 from authentication.services.auth_service import AuthenticationException
@@ -10,8 +11,13 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from authentication.dtos import AccountDTO
-from authentication.seriaizers import LoginPayloadSerializer
 from authentication.services import AuthService
+
+
+@dataclass
+class LoginDTO:
+    username: str
+    password: str
 
 
 @api.controller('')
@@ -22,15 +28,9 @@ class AuthController:
         self._auth_service = auth_service
 
     @api.router_post('login/', exceptions=[(AuthenticationException, HTTPStatus.UNAUTHORIZED)])
-    def login(self, request: Request):
-        serializer = LoginPayloadSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        credentials = serializer.validated_data
-        account = self._auth_service.authenticate(username=credentials['username'], password=credentials['password'])
+    def login(self, request: Request, request_body: LoginDTO):
+        account = self._auth_service.authenticate(username=request_body.username, password=request_body.password)
 
         login(request, account.user)
 
-        return Response(dataclasses.asdict(AccountDTO(id=account.id, email=account.email)))
-
-
+        return AccountDTO(id=account.id, email=account.email)

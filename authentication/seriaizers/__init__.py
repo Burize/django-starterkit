@@ -1,2 +1,0 @@
-from .login_payload import LoginPayloadSerializer
-from .sign_up_payload import SignUpPayloadSerializer

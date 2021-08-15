@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from typing import Callable
 from typing import List
 from typing import Literal
@@ -50,7 +49,7 @@ class RouterDescriptor:
         self._controller_method(*args, **kwargs)
 
 
-class ControllerClass(Protocol):
+class APIControllerInterface(Protocol):
     _base_path: str
     _routes: List[Route]
 
