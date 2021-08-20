@@ -9,7 +9,7 @@ class Order(TimestampedModel):
     id = models.UUIDField(primary_key=True, default=uuid4)
     number = models.PositiveIntegerField(unique=True, null=False)
 
-    client = models.ForeignKey(Account, related_name='orders', on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, related_name='orders', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Order: {self.number}'

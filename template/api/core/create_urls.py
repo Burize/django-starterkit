@@ -1,4 +1,5 @@
 import dataclasses
+from collections import Iterable
 from typing import get_type_hints
 from typing import Any
 from typing import List
@@ -26,6 +27,7 @@ from template.api.argument_resolvers import RequestBodyArgumentResolver
 from template.api.core.auth import is_need_authentication
 from template.api.core.routing import APIControllerInterface
 from template.api.core.routing import Route
+from template.api.encoders import encode_dataclass
 
 ARGUMENT_RESOLVERS = [
     HttpRequestArgumentResolver,
@@ -121,10 +123,9 @@ def _encode_result(result: Any) -> Response:
     if result is HTTPStatus:
         return Response(status=result)
 
-    if dataclasses.is_dataclass(result):
-        return Response(dataclasses.asdict(result))
+    encoded_result = encode_dataclass(result)
 
-    return Response(result)
+    return Response(encoded_result)
 
 
 def rewrite_uritemplate_to_django_rest(url_path: str) -> str:

@@ -1,6 +1,6 @@
-import dataclasses
-from  dataclasses import dataclass
+from dataclasses import dataclass
 from http import HTTPStatus
+from uuid import UUID
 
 from authentication.services.auth_service import AuthenticationException
 from template import api
@@ -8,9 +8,7 @@ from template import api
 from django.contrib.auth import login
 from injector import inject
 from rest_framework.request import Request
-from rest_framework.response import Response
 
-from authentication.dtos import AccountDTO
 from authentication.services import AuthService
 
 
@@ -18,6 +16,12 @@ from authentication.services import AuthService
 class LoginDTO:
     username: str
     password: str
+
+
+@dataclass
+class AccountDTO:
+    id: UUID
+    email: str
 
 
 @api.controller('')

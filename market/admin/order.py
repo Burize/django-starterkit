@@ -19,7 +19,7 @@ class OrderForm(forms.ModelForm):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    search_fields = ['number', 'client__email']
+    search_fields = ['number', 'account__email']
     list_display = ['number', 'get_client_name']
     exclude = ['id']
 
@@ -27,9 +27,9 @@ class OrderAdmin(admin.ModelAdmin):
 
     inlines = [ProductInline]
 
-    @admin.display(description='Client email', ordering='client__email')
+    @admin.display(description='Client email', ordering='account__email')
     def get_client_name(self, obj):
-        return obj.client.email
+        return obj.account.email
 
 
 

@@ -10,3 +10,6 @@ class CustomException(Exception):
 
 class NotFoundException(CustomException):
     pass
+
+class ForbiddenException(CustomException):
+    pass
