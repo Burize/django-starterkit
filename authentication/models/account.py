@@ -12,6 +12,12 @@ class Account(TimestampedModel):
     is_verified = models.BooleanField(default=False)
     user = models.OneToOneField(User, related_name='account', on_delete=models.CASCADE)
 
+
+
+
     @property
     def password(self):
         return self.user.password
+
+    def __str__(self):
+        return f'Account: {self.email}'

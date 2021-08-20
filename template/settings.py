@@ -10,7 +10,9 @@ SECRET_KEY = 'yktbpod+am3!mq^s5c=p)h88m+7un_oyqdzg*pnh74e_fglw=9'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '0.0.0.0'
+]
 
 # Application definition
 
@@ -20,6 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.staticfiles',
+    'ajax_select',
     'authentication',
     'market',
 ]
@@ -106,3 +110,5 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_TZ = True
+
+STATIC_URL = '/static/'
