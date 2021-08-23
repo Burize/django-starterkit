@@ -20,9 +20,21 @@ class Route:
         http_method: str,
         controller_method: Callable,
     ):
+        self._permissions = []
         self._url = url
         self.http_method = http_method
         self.controller_method = controller_method
+
+    def add_permission(self, permission: str):
+        self._permissions.append(permission)
+
+    @property
+    def has_permissions(self):
+        return bool(self._permissions)
+
+    @property
+    def permissions(self) -> List[str]:
+        return self._permissions
 
     @property
     def url(self):
@@ -45,26 +57,6 @@ class Route:
         return None
 
 
-class RouterDescriptor:
-    def __init__(
-        self,
-        controller_method: Callable,
-        url: str,
-        http_method: HTTPMethod,
-    ):
-        self._controller_method = controller_method
-        self._url = url
-        self._http_method = http_method
-
-    def __set_name__(self, cls, name):
-        if not hasattr(cls, '_routes'):
-            cls._routes = []
-        cls._routes.append(Route(self._url, self._http_method, self._controller_method))
-
-    def __call__(self, *args, **kwargs):
-        self._controller_method(*args, **kwargs)
-
-
 class APIControllerInterface(Protocol):
     _base_path: str
     _routes: List[Route]
@@ -73,6 +65,7 @@ class APIControllerInterface(Protocol):
 def controller(base_path: str):
     def wrapped_class(cls):
         cls._base_path = base_path
+        cls._routes = [method._route for method in cls.__dict__.values() if hasattr(method, '_route')]
         return cls
 
     return wrapped_class
@@ -99,7 +92,7 @@ def router_delete(url: str):
 
 
 def _route(url: str, http_method: HTTPMethod):
-    def wrapped_method(func):
-        return RouterDescriptor(func, url, http_method)
-
-    return wrapped_method
+    def decorator(controller_method: Callable):
+        controller_method._route = Route(url=url, http_method=http_method, controller_method=controller_method)
+        return controller_method
+    return decorator

@@ -25,6 +25,7 @@ from template.api.argument_resolvers import PathParametersArgumentResolver
 from template.api.argument_resolvers import QueryParametersArgumentResolver
 from template.api.argument_resolvers import RequestBodyArgumentResolver
 from template.api.core.auth import is_need_authentication
+from template.api.core.permissions import check_permission
 from template.api.core.routing import APIControllerInterface
 from template.api.core.routing import Route
 from template.api.encoders import encode_dataclass
@@ -63,7 +64,7 @@ def _create_django_view(controller_class: Type[APIControllerInterface], routes: 
 
     for route in routes:
         dispatch = _create_dispatch_function(controller_class, route)
-        dispatch.route = route
+        # dispatch.route = route
         dispatch_method_name = route.http_method.lower()
         setattr(View, dispatch_method_name, dispatch)
     return View().as_view()
@@ -84,6 +85,11 @@ def _call_controller_method(
     request: Request,
     route: Route,
 ) -> Response:
+
+    if route.has_permissions:
+        for permission in route.permissions:
+            check_permission(request.user, permission)
+
     kwargs = {}
 
     arguments = get_type_hints(controller_method)

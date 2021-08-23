@@ -13,3 +13,7 @@ class NotFoundException(CustomException):
 
 class ForbiddenException(CustomException):
     pass
+
+
+class PermissionException(CustomException):
+    pass

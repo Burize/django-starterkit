@@ -6,6 +6,7 @@ from rest_framework.views import exception_handler as rf_exception_handler
 
 from template.exceptions import ForbiddenException
 from template.exceptions import NotFoundException
+from template.exceptions import PermissionException
 
 ERROR_500 = 'Sorry, something went wrong.'
 
@@ -15,7 +16,10 @@ def exception_handler(exc, context):
         return Response(exc.message, status=HTTPStatus.NOT_FOUND)
 
     if isinstance(exc, ForbiddenException):
-        return Response(exc.message, status=HTTPStatus.FORBIDDEN)
+        return Response(exc.message or 'Access denied', status=HTTPStatus.FORBIDDEN)
+
+    if isinstance(exc, PermissionException):
+        return Response(exc.message or 'Access denied', status=HTTPStatus.FORBIDDEN)
 
     default_handler_result = rf_exception_handler(exc, context)
     if default_handler_result:

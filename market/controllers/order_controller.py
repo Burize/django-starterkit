@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from injector import inject
 from rest_framework import viewsets
 from rest_framework.request import Request
 
@@ -17,14 +18,13 @@ class OrderDTO:
 
 
 @api.controller('orders/')
-class OrderController(viewsets.ViewSet):
+class OrderController():
+    @inject
     def __init__(
         self,
-        account_repository: AccountRepository = AccountRepository(),
-        order_queries: OrderQueries = OrderQueries(),
-        **kwargs,
+        account_repository: AccountRepository,
+        order_queries: OrderQueries,
     ):
-        super().__init__(**kwargs)
         self._account_repository = account_repository
         self._order_queries = order_queries
 
@@ -37,7 +37,7 @@ class OrderController(viewsets.ViewSet):
         return [OrderDTO(id=order.id, number=order.number) for order in orders]
 
     @api.router_get('{order_id}')
-    def list(self, request: Request, order_id: str):
+    def get_order(self, request: Request, order_id: str):
         user_id = request.user.id
         account = self._account_repository.get_by_user_id(user_id)
 
