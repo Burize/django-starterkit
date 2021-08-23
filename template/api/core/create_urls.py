@@ -84,19 +84,16 @@ def _call_controller_method(
     request: Request,
     route: Route,
 ) -> Response:
-    try:
-        kwargs = {}
+    kwargs = {}
 
-        arguments = get_type_hints(controller_method)
+    arguments = get_type_hints(controller_method)
 
-        for (arg_name, arg_type) in arguments.items():
-            resolver = _get_argument_resolver(route, arg_name, arg_type, ARGUMENT_RESOLVERS)
-            kwargs[arg_name] = resolver.resolve_argument(request, route, arg_name, arg_type)
+    for (arg_name, arg_type) in arguments.items():
+        resolver = _get_argument_resolver(route, arg_name, arg_type, ARGUMENT_RESOLVERS)
+        kwargs[arg_name] = resolver.resolve_argument(request, route, arg_name, arg_type)
 
-        result = controller_method(controller, **kwargs)
-        return _encode_result(result)
-    except route.expected_exceptions as exception:
-        return Response(exception.message, status=route.http_code_by_exception[type(exception)])
+    result = controller_method(controller, **kwargs)
+    return _encode_result(result)
 
 
 def _get_argument_resolver(

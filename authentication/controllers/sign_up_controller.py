@@ -25,7 +25,8 @@ class SignUpController:
     def __init__(self, registration_service: RegistrationService):
         self._registration_service = registration_service
 
-    @api.router_post('sign_up', exceptions=[(CreateNewUserException, HTTPStatus.BAD_REQUEST)])
+    @api.router_post('sign_up')
+    @api.raises(CreateNewUserException, HTTPStatus.BAD_REQUEST)
     @transaction.atomic()
     def signUp(self, request_body: SighUpDTO):
         self._registration_service.create_new_user(

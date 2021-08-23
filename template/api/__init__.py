@@ -6,3 +6,4 @@ from .core.routing import router_patch
 from .core.routing import router_delete
 from .core.create_urls import create_urls
 from .core.auth import without_authentication
+from .core.exception import raises

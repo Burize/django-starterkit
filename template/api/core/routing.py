@@ -4,13 +4,10 @@ from typing import List
 from typing import Literal
 from typing import Optional
 from typing import Protocol
-from typing import Tuple
-from typing import Type
 
 from uritemplate import URITemplate
 from uritemplate.variable import URIVariable
 
-ExceptionMatchToCode = Tuple[Type[Exception], int]
 HTTPMethod = Literal['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 
 _remove_query_params_regexp = re.compile(r'{\?[^}]*}')
@@ -22,15 +19,10 @@ class Route:
         url: str,
         http_method: str,
         controller_method: Callable,
-        exceptions: Optional[List[ExceptionMatchToCode]] = (),
     ):
         self._url = url
         self.http_method = http_method
         self.controller_method = controller_method
-
-        self._exceptions = exceptions
-        self.http_code_by_exception = {exception[0]: exception[1] for exception in exceptions}
-        self.expected_exceptions = tuple(self.http_code_by_exception)
 
     @property
     def url(self):
@@ -59,17 +51,15 @@ class RouterDescriptor:
         controller_method: Callable,
         url: str,
         http_method: HTTPMethod,
-        exceptions: Optional[List[ExceptionMatchToCode]] = (),
     ):
         self._controller_method = controller_method
         self._url = url
         self._http_method = http_method
-        self._exceptions = exceptions
 
     def __set_name__(self, cls, name):
         if not hasattr(cls, '_routes'):
             cls._routes = []
-        cls._routes.append(Route(self._url, self._http_method, self._controller_method, self._exceptions))
+        cls._routes.append(Route(self._url, self._http_method, self._controller_method))
 
     def __call__(self, *args, **kwargs):
         self._controller_method(*args, **kwargs)
@@ -88,28 +78,28 @@ def controller(base_path: str):
     return wrapped_class
 
 
-def router_get(url: str, exceptions: Optional[List[ExceptionMatchToCode]] = ()):
-    return _route(url, 'GET', exceptions=exceptions)
+def router_get(url: str):
+    return _route(url, 'GET')
 
 
-def router_post(url: str, exceptions: Optional[List[ExceptionMatchToCode]] = ()):
-    return _route(url, 'POST', exceptions=exceptions)
+def router_post(url: str):
+    return _route(url, 'POST')
 
 
-def router_put(url: str, exceptions: Optional[List[ExceptionMatchToCode]] = ()):
-    return _route(url, 'PUT', exceptions=exceptions)
+def router_put(url: str):
+    return _route(url, 'PUT')
 
 
-def router_patch(url: str, exceptions: Optional[List[ExceptionMatchToCode]] = ()):
-    return _route(url, 'PATCH', exceptions=exceptions)
+def router_patch(url: str):
+    return _route(url, 'PATCH')
 
 
-def router_delete(url: str, exceptions: Optional[List[ExceptionMatchToCode]] = ()):
-    return _route(url, 'DELETE', exceptions=exceptions)
+def router_delete(url: str):
+    return _route(url, 'DELETE')
 
 
-def _route(url: str, http_method: HTTPMethod, exceptions: Optional[List[ExceptionMatchToCode]]):
+def _route(url: str, http_method: HTTPMethod):
     def wrapped_method(func):
-        return RouterDescriptor(func, url, http_method, exceptions)
+        return RouterDescriptor(func, url, http_method)
 
     return wrapped_method

@@ -31,7 +31,8 @@ class AuthController:
     def __init__(self, auth_service: AuthService):
         self._auth_service = auth_service
 
-    @api.router_post('login/', exceptions=[(AuthenticationException, HTTPStatus.UNAUTHORIZED)])
+    @api.router_post('login/')
+    @api.raises(AuthenticationException, HTTPStatus.UNAUTHORIZED)
     def login(self, request: Request, request_body: LoginDTO):
         account = self._auth_service.authenticate(username=request_body.username, password=request_body.password)
 
