@@ -1,2 +1,3 @@
 from .account import AccountAdmin
-from .lookups import  *
+from .user import CustomUserAdmin
+from .lookups import *

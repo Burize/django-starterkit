@@ -31,10 +31,4 @@ class OrderAdmin(admin.ModelAdmin):
         return obj.account.email
 
 
-
-
-
-
-
-
 admin.site.register(Order, OrderAdmin)
