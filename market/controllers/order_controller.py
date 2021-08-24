@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from injector import inject
-from rest_framework import viewsets
 from rest_framework.request import Request
 
 from authentication.repositories import AccountRepository

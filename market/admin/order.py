@@ -3,7 +3,6 @@ from django.contrib import admin
 
 from market.models import Order
 from market.models import OrderProduct
-from market.models import Product
 
 from django import forms
 
@@ -15,7 +14,7 @@ class ProductInline(admin.StackedInline):
 
 
 class OrderForm(forms.ModelForm):
-    client = AutoCompleteSelectField(channel='account_channel')
+    account = AutoCompleteSelectField(channel='account_channel')
 
 
 class OrderAdmin(admin.ModelAdmin):

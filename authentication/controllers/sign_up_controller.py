@@ -2,8 +2,6 @@ from dataclasses import dataclass
 from http import HTTPStatus
 
 from django.db import transaction
-from rest_framework.response import Response
-from rest_framework import status
 from injector import inject
 
 from authentication.services.registration_service import CreateNewUserException

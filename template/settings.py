@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'ajax_select',
     'authentication',
     'market',
+    'template',
 ]
 
 MIDDLEWARE = [
