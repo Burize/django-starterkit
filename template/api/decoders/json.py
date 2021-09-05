@@ -7,20 +7,13 @@ from typing import TypeVar
 import dataclasses
 from typing import get_origin
 
+from template.api.decoders.exceptions import BaseDecodeException
 from template.utils.types import is_optional
 
 Item = TypeVar('Item')
 
 
-class JSONDecodeException(Exception):
-
-    def __init__(self, error: str):
-        self._error = error
-
-    @property
-    def message(self):
-        return self._error
-
+class JSONDecodeException(BaseDecodeException):
     @classmethod
     def fields_decode_exception(cls, type: Type[Item], errors: Dict[str, str]) -> 'JSONDecodeException':
         return cls(f'Cannot decode fields for "{type}": {str(errors)}')

@@ -1,5 +1,3 @@
-import dataclasses
-from collections import Iterable
 from typing import get_type_hints
 from typing import Any
 from typing import List
@@ -120,10 +118,10 @@ def _encode_result(result: Any) -> Response:
     if result is None:
         return Response(status=HTTPStatus.OK)
 
-    if result is isinstance(result, Response):
+    if isinstance(result, Response):
         return result
 
-    if result is HTTPStatus:
+    if isinstance(result, HTTPStatus):
         return Response(status=result)
 
     encoded_result = encode_dataclass(result)

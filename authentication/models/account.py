@@ -13,8 +13,12 @@ class Account(TimestampedModel):
     user = models.OneToOneField(User, related_name='account', on_delete=models.CASCADE)
 
     @property
-    def password(self):
+    def password(self) -> str:
         return self.user.password
+
+    @property
+    def username(self) -> str:
+        return self.user.username
 
     def __str__(self):
         return f'Account: {self.email}'

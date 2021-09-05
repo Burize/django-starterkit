@@ -13,3 +13,5 @@ urlpatterns = [
     path('', include(auth_urls)),
     path('market/', include(market_urls)),
 ]
+
+handler404 = 'template.api.exception_handler.handle_not_found_path'
