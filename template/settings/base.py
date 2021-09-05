@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django_extensions',
     'ajax_select',
     'authentication',
     'market',
