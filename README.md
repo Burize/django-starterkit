@@ -96,7 +96,7 @@ pipenv shell
 ```
 
 Commands:
-- fill database with initial data: `python manage.py runscript initial`
+- fill database with initial data: `python manage.py runscript create_initial_data`
 - create super user: `python manage.py createsuperuser`
 - run server: `python runserver 0.0.0.0:8000`
 - run test: `pytest`
