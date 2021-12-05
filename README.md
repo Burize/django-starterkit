@@ -98,7 +98,12 @@ pipenv shell
 Commands:
 - fill database with initial data: `python manage.py runscript create_initial_data`
 - create super user: `python manage.py createsuperuser`
-- run server: `python runserver 0.0.0.0:8000`
+- run server: `python manage.py runserver 0.0.0.0:8000`
 - run test: `pytest`
 
+4. Admin page is available at `http://localhost:8000/admin/` - you can log into it using superuser credentials
 
+## TODO
+Need to add OpenAPI scheme generation and graphic representation by Swagger/Redoc
+
+_Probably it will be own AutoSchemeClass for DEFAULT_SCHEMA_CLASS of DRF based on [drf_spectacular](https://github.com/tfranzel/drf-spectacular/blob/master/drf_spectacular/openapi.py)_ 
