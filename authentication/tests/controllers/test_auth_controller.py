@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 
 from authentication.models import Account
 
-endpoint = '/login/'
+login_endpoint = '/login/'
+logout_endpoint = '/logout/'
 
 
 @pytest.mark.db
@@ -19,10 +20,33 @@ def test_login(api_client):
     dto = {'username': username, 'password': password}
 
     # Act
-    response = api_client.post(endpoint, data=dto)
+    response = api_client.post(login_endpoint, data=dto)
 
     # Assert
     assert response.status_code == HTTPStatus.OK
     result = response.data
     assert result['id'] == account.id
     assert result['email'] == account.email
+
+
+@pytest.mark.db
+def test_logout(api_client):
+    user = User.objects.create(username='test_user', password='1234')
+
+    api_client.force_login(user)
+
+    # Act
+    response = api_client.post(logout_endpoint)
+
+    # Assert
+    assert response.status_code == HTTPStatus.OK
+
+
+@pytest.mark.db
+def test_logout_error_if_not_logged_in(api_client):
+    # Act
+    response = api_client.post(logout_endpoint)
+
+    # Assert
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert response.json() == 'Not logged in'

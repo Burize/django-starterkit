@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from http import HTTPStatus
 from uuid import UUID
 
+from django.contrib.auth import logout
+
 from authentication.services.auth_service import AuthenticationException
 from template import api
 
@@ -39,3 +41,12 @@ class AuthController:
         login(request, account.user)
 
         return AccountDTO(id=account.id, email=account.email)
+
+    @api.router_post('logout/')
+    @api.raises(AuthenticationException, HTTPStatus.UNAUTHORIZED)
+    def logout(self, request: Request):
+        if not request.user.is_authenticated:
+            raise AuthenticationException('Not logged in')
+
+        logout(request)
+
