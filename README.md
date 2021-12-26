@@ -81,6 +81,10 @@ Also, it doesn't have such problems as Django does:
 
 ## Start project 
 
+You can start project via docker. Run `docker compose up` to build and run the postgres-db and the web-server containers. After that, you only need to run the command to apply migrations in the web-server container: `python manage.py migrate` - see for examples [Run a command in a running container](https://docs.docker.com/engine/reference/commandline/exec/)
+
+You can also start project without docker by these steps:
+
 1. Install dependencies (pipenv creates virtualenv automatically): 
 ```
 pipenv install
@@ -95,13 +99,19 @@ pipenv install
 pipenv shell
 ```
 
-Commands:
+4. Run database migrations:
+```
+python manage.py migrate
+```
+
+After this steps (or building project via docker) you can apply some if these commands:
 - fill database with initial data: `python manage.py runscript create_initial_data`
 - create super user: `python manage.py createsuperuser`
 - run server: `python manage.py runserver 0.0.0.0:8000`
 - run test: `pytest`
 
-4. Admin page is available at `http://localhost:8000/admin/` - you can log into it using superuser credentials
+
+Admin page is available at `http://localhost:8000/admin/` - you can log into it using superuser credentials
 
 ## TODO
 Need to add OpenAPI scheme generation and graphic representation by Swagger/Redoc

@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgres://main_user:1234@db/main_db
+    ports:
+    - 8000:8000
+    volumes:
+    - ./:/app
+    command: python manage.py runserver 0.0.0.0:8000
+
+
+  db:
+    image: postgres:14.1-alpine
+    environment:
+      - POSTGRES_DB=main_db
+      - POSTGRES_USER=main_user
+      - POSTGRES_PASSWORD=1234
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pg-data:
