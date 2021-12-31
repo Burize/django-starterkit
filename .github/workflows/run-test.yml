@@ -31,7 +31,9 @@ jobs:
         with:
           python-version: 3.9
       - name: Install dependencies
-        run: ./ci/install_dependencies
+        run: |
+          chmod +x ./ci/install_dependencies
+          ./ci/install_dependencies
       - name: Run tests
         run: |
           pipenv run pytest --pyargs ${{ matrix.target }}
