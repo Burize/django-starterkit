@@ -15,3 +15,6 @@ urlpatterns = [
 ]
 
 handler404 = 'template.api.exception_handler.handle_not_found_path'
+
+
+### for test
