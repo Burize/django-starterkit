@@ -1,0 +1,37 @@
+name: Testing
+
+on: pull_request
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    run-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - authentication
+          - market
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Data Base
+        uses: Harmon758/postgresql-action@v1
+        with:
+          postgresql version: '14.1'
+          postgresql db: 'django'
+          postgresql user: 'main_user'
+          postgresql password: '1234'
+      - name: Install Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: ./ci/install-dependencies
+      - name: Run tests
+        run: |
+          pipenv run pytest --pyargs ${{ matrix.target }}
