@@ -5,6 +5,8 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 SECRET_KEY = 'yktbpod+am3!mq^s5c=p)h88m+7un_oyqdzg*pnh74e_fglw=9'
 
@@ -107,5 +109,3 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_TZ = True
-
-STATIC_URL = '/static/'

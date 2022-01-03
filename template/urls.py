@@ -5,6 +5,7 @@ from django.urls import path
 from authentication import urls as auth_urls
 from market import urls as market_urls
 from ajax_select import urls as ajax_select_urls
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
@@ -13,5 +14,7 @@ urlpatterns = [
     path('', include(auth_urls)),
     path('market/', include(market_urls)),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
 
 handler404 = 'template.api.exception_handler.handle_not_found_path'
