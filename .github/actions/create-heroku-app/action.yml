@@ -14,7 +14,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: heroky create ${{ inputs.app-name }}
+    - run: heroku create ${{ inputs.app-name }}
       shell: bash
       env:
         HEROKU_API_KEY: ${{ inputs.heroku-api-key }}
