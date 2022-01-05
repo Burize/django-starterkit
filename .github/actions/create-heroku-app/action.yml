@@ -6,10 +6,6 @@ inputs:
     type: string
     required: true
     description: Heroku app name
-  heroku-api-key:
-    type: string
-    required: true
-    description: Heroku api key
 
 runs:
   using: "composite"
@@ -20,17 +16,9 @@ runs:
         heroku buildpacks:add https://github.com/heroku/heroku-buildpack-python
         heroku buildpacks:add https://github.com/heroku/heroku-buildpack-nginx.git
       shell: bash
-      env:
-        HEROKU_API_KEY: ${{ inputs.heroku-api-key }}
     - run: heroku labs:enable runtime-dyno-metadata -a ${{ inputs.app-name }}
       shell: bash
-      env:
-        HEROKU_API_KEY: ${{ inputs.heroku-api-key }}
     - run: heroku config:set DJANGO_SETTINGS_MODULE='template.settings.prod'
       shell: bash
-      env:
-        HEROKU_API_KEY: ${{ inputs.heroku-api-key }}
     - run: heroku addons:create heroku-postgresql:hobby-dev
       shell: bash
-      env:
-        HEROKU_API_KEY: ${{ inputs.heroku-api-key }}

@@ -36,5 +36,9 @@ jobs:
         with:
           app-name: ${{ github.event.inputs.app-name }}
           heroku-api-key: ${{ secrets.HEROKU_API_KEY }}
-      - run: heroku git:remote -a ${{ github.event.inputs.app-name }}
-      - run: git push heroku ${{ github.ref_name }}:master
+      - name: Deploy code
+        run: |
+          heroku git:remote -a ${{ github.event.inputs.app-name }}
+          git push heroku ${{ github.ref_name }}:master
+      - name: Migrate Database
+        run: heroku run python manage.py migrate
