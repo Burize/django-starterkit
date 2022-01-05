@@ -6,11 +6,6 @@ on:
       app-name:
         description: Name for Heroku app
         required: true
-      branch:
-        description: Respository branch is used to create app
-        type: string
-        default: master
-        required: true
       is-app-already-created:
         type: boolean
         description: App already created
@@ -30,4 +25,4 @@ jobs:
       - name: Deploy
         run: |
           heroku git:remote -a ${{ github.event.inputs.app-name }}
-          git push heroku ${{ github.event.inputs. }}:master
+          git push heroku ${{ github.ref_name }}:master
