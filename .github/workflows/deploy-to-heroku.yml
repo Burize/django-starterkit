@@ -26,8 +26,8 @@ jobs:
         with:
           app-name: ${{ github.event.inputs.app-name }}
           heroku-api-key: ${{ secrets.HEROKU_API_KEY }}
-        - run: |
-          git config --global user.name 'Heroku Github action'
-          git config --global user.email 'blanck@email.com'
-        - run: heroku git:remote -a ${{ github.event.inputs.app-name }}
-        - run: git push heroku ${{ github.ref_name }}:master
+      - run: |
+        git config --global user.name 'Heroku Github action'
+        git config --global user.email 'blanck@email.com'
+      - run: heroku git:remote -a ${{ github.event.inputs.app-name }}
+      - run: git push heroku ${{ github.ref_name }}:master
