@@ -6,7 +6,8 @@ inputs:
 
 runs:
   using: "composite"
-  env: ${{ secrets.HEROKU_API_KEY }}
+  env:
+    HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   steps:
     - run: heroky create ${{ inputs.app-name }}
     - run: |
