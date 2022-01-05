@@ -1,0 +1,15 @@
+inputs:
+  app-name:
+    type: string
+    required: true
+
+
+runs:
+  using: "composite"
+  env: ${{ secrets.HEROKU_API_KEY }}
+  steps:
+    - run: heroky create ${{ inputs.app-name }}
+    - run: |
+        heroku buildpacks:add https://github.com/heroku/heroku-buildpack-python
+        heroku buildpacks:add https://github.com/heroku/heroku-buildpack-nginx.git
+    - run: heroku labs:enable runtime-dyno-metadata -a ${{ inputs.app-name }}
