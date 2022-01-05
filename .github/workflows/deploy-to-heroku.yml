@@ -17,17 +17,25 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Heroku login credentials
+          run: |
+            cat > ~/.netrc <<EOF
+              machine api.heroku.com
+                login $HEROKU_EMAIL
+                password $HEROKU_API_KEY
+              machine git.heroku.com
+                login $HEROKU_EMAIL
+                password $HEROKU_API_KEY
+            EOF
       - name: Create app
         if: github.event.inputs.is-app-already-created == 'false'
         uses: ./.github/actions/create-heroku-app
         with:
           app-name: ${{ github.event.inputs.app-name }}
           heroku-api-key: ${{ secrets.HEROKU_API_KEY }}
-      - run: |
-          git config --global user.name 'Heroku Github action'
-          git config --global user.email 'blanck@email.com'
       - run: heroku git:remote -a ${{ github.event.inputs.app-name }}
       - run: git push heroku ${{ github.ref_name }}:master
