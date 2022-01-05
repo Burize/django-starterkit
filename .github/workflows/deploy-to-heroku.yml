@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Heroku login credentials
+      - name: Set heroku credentials
         run: |
           cat > ~/.netrc <<EOF
             machine git.heroku.com
@@ -35,7 +35,6 @@ jobs:
         uses: ./.github/actions/create-heroku-app
         with:
           app-name: ${{ github.event.inputs.app-name }}
-          heroku-api-key: ${{ secrets.HEROKU_API_KEY }}
       - name: Deploy code
         run: |
           heroku git:remote -a ${{ github.event.inputs.app-name }}
