@@ -22,15 +22,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Heroku login credentials
-          run: |
-            cat > ~/.netrc <<EOF
-              machine api.heroku.com
-                login $HEROKU_EMAIL
-                password $HEROKU_API_KEY
-              machine git.heroku.com
-                login $HEROKU_EMAIL
-                password $HEROKU_API_KEY
-            EOF
+        run: |
+          cat > ~/.netrc <<EOF
+            machine api.heroku.com
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
+            machine git.heroku.com
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
+          EOF
       - name: Create app
         if: github.event.inputs.is-app-already-created == 'false'
         uses: ./.github/actions/create-heroku-app
