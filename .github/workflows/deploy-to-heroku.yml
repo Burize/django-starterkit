@@ -24,7 +24,7 @@ jobs:
         if: github.event.inputs.is-app-already-created != true
         uses: ./.github/actions/create-heroku-app
         with:
-          - app-name: ${{ github.event.inputs.app-name }}
+          app-name: ${{ github.event.inputs.app-name }}
       - name: Deploy
         run: |
           heroku git:remote -a ${{ github.event.inputs.app-name }}
