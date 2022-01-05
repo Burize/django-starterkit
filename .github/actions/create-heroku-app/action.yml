@@ -13,8 +13,6 @@ inputs:
 
 runs:
   using: "composite"
-  env:
-    HEROKU_API_KEY: ${{ inputs.heroku-api-key }}
   steps:
     - run: heroky create ${{ inputs.app-name }}
     - run: |
