@@ -15,6 +15,8 @@ on:
 jobs:
   deploy-app:
     runs-on: ubuntu-latest
+    env:
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,11 +26,8 @@ jobs:
         with:
           app-name: ${{ github.event.inputs.app-name }}
           heroku-api-key: ${{ secrets.HEROKU_API_KEY }}
-      - name: Deploy
-        run: |
+        - run: |
           git config --global user.name 'Heroku Github action'
           git config --global user.email 'blanck@email.com'
-          heroku git:remote -a ${{ github.event.inputs.app-name }}
-          git push heroku ${{ github.ref_name }}:master
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        - run: heroku git:remote -a ${{ github.event.inputs.app-name }}
+        - run: git push heroku ${{ github.ref_name }}:master
