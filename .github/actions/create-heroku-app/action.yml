@@ -1,9 +1,9 @@
+name: 'Create Heroku app'
+description: 'Create a new Heroku app with python+Nginx buildpacks'
 inputs:
   app-name:
     type: string
     required: true
-
-
 runs:
   using: "composite"
   env:
