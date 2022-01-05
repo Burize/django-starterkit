@@ -25,6 +25,7 @@ jobs:
         uses: ./.github/actions/create-heroku-app
         with:
           app-name: ${{ github.event.inputs.app-name }}
+          heroku-api-key: ${{ secrets.HEROKU_API_KEY }}
       - name: Deploy
         run: |
           heroku git:remote -a ${{ github.event.inputs.app-name }}

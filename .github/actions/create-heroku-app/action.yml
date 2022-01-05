@@ -1,13 +1,20 @@
 name: 'Create Heroku app'
 description: 'Create a new Heroku app with python+Nginx buildpacks'
+
 inputs:
   app-name:
     type: string
     required: true
+    description: Heroku app name
+  heroku-api-key:
+    type: string
+    required: true
+    description: Heroku api key
+
 runs:
   using: "composite"
   env:
-    HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    HEROKU_API_KEY: ${{ inputs.heroku-api-key }}
   steps:
     - run: heroky create ${{ inputs.app-name }}
     - run: |
