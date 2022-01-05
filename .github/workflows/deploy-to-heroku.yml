@@ -20,8 +20,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Create app
-        if: ! github.event.inputs.is-app-already-created
-        uses: ./.github/workflows/create-heroku-app
+        if: github.event.inputs.is-app-already-created != true
+        uses: ./.github/actions/create-heroku-app
       - name: Deploy
         run: |
           heroku git:remote -a ${{ github.event.inputs.app-name }}
