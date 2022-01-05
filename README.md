@@ -113,6 +113,16 @@ After this steps (or building project via docker) you can apply some if these co
 
 Admin page is available at `http://localhost:8000/admin/` - you can log into it using superuser credentials
 
+
+## Deployment
+App is ready to deploy to [Heroku](https://devcenter.heroku.com/). It uses Nginx as Reverse Proxy Server - you can find its config [here](conf/nginx.conf.erb), and [Gunicorn](https://gunicorn.org/) as Application Server.
+Also, this repository contains the action to create/deploy app for heroku - [deploy-to-heroku](.github/workflows/deploy-to-heroku.yml)
+
+#### Static files
+> With debug turned off Django won’t handle static files for you any more - your production web server (Apache or something) should take care of that.
+
+So, you should handle static files: styles/js for admin pages, logos and etc, on production by yourself. If you want to have maximum configurability: set CDN, set special headers and etc, then using Nginx (or another web server) is good idea. If you don't want use it, you can consider other decision: [WhiteNoise](http://whitenoise.evans.io/en/stable/) 
+
 ## TODO
 Need to add OpenAPI scheme generation and graphic representation by Swagger/Redoc
 
