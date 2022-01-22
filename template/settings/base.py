@@ -47,10 +47,16 @@ REST_FRAMEWORK = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'json': {
+            '()': 'template.logging.JsonLoggingFormatter',
+        },
+    },
     'handlers': {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'formatter': 'json',
         },
     },
     'loggers': {
@@ -58,6 +64,12 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
             'level': 'INFO',
+        },
+        # Loggers with WARNING level
+        'ddtrace': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'WARNING',
         },
     },
 }
