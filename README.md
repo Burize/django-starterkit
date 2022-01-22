@@ -123,6 +123,16 @@ Also, this repository contains the action to create/deploy app for heroku - [dep
 
 So, you should handle static files: styles/js for admin pages, logos and etc, on production by yourself. If you want to have maximum configurability: set CDN, set special headers and etc, then using Nginx (or another web server) is good idea. If you don't want use it, you can consider other decision: [WhiteNoise](http://whitenoise.evans.io/en/stable/) 
 
+## Logging
+Starter kit configured to work with [DataDog](https://www.datadoghq.com/) - in addition to common logging, it provides a detailed view of how your process is running, consuming CPU, memory and etc. See more [there](https://www.datadoghq.com/product/apm/) 
+
+For example, here is the trace of `/market/orders` endpoint executing. It's divided into units of work and contains web/server and database levels.
+
+![Datadog APM example](./docs/datadog_apm.png)
+
+To make logging and profiling work you need to install [Datadog agent](https://docs.datadoghq.com/agent/) and maybe some additional configuration - it depends on your environment.
+
+You can see the configuration for Heroku in this [repository](https://github.com/Burize/terraform-heroku)
 ## TODO
 Need to add OpenAPI scheme generation and graphic representation by Swagger/Redoc
 
